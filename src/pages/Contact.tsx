@@ -35,8 +35,8 @@ const contactDetails: ContactDetail[] = [
   },
   {
     label: 'Email',
-    value: 'hello@flowerzone.com',
-    href: 'mailto:hello@flowerzone.com',
+    value: 'tendofiona@yahoo.com',
+    href: 'mailto:tendofiona@yahoo.com',
     image: emailIcon,
   },
 ];
