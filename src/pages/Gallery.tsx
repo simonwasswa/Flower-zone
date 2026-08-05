@@ -13,15 +13,20 @@ type GalleryItem = {
   category: string;
   src: string;
   poster?: string;
-  layout?: string;
 };
 
-const galleryLayouts: Record<string, string> = {
-  featured: 'md:col-span-2 md:row-span-2',
-  portrait: 'md:row-span-2',
-  wide: 'md:col-span-2',
-  standard: '',
-};
+// Repeats the editorial rhythm from the reference: 1+2, 3, 2+1, 1+1+1.
+// On tablet the same set becomes 1+1, 2, 1+1, 1+1, 2.
+const galleryPattern = [
+  '',
+  'md:col-span-2',
+  'sm:col-span-2 md:col-span-3',
+  'md:col-span-2',
+  '',
+  '',
+  '',
+  'sm:col-span-2 md:col-span-1',
+];
 
 const galleryVideoReplacements: Record<string, string> = {
   'Bouquet in the Making': 'WhatsApp Video 2026-08-04 at 10.51.47 AM.mp4',
@@ -78,7 +83,6 @@ export default function Gallery() {
             poster: row.poster_url
               ? resolveMediaUrl(row.poster_url, row.updated_at)
               : undefined,
-            layout: galleryLayouts[row.layout || 'standard'] || '',
           };
         }),
       );
@@ -144,9 +148,9 @@ export default function Gallery() {
             No gallery items found.
           </div>
         ) : (
-          <div className="grid auto-rows-[240px] gap-4 sm:auto-rows-[280px] md:grid-cols-3 md:auto-rows-[260px]">
-            {visibleItems.map((item) => (
-              <article key={item.id} className={`${item.layout ?? ''} group relative min-h-0 overflow-hidden rounded-[16px] bg-blush-dark`}>
+          <div className="grid auto-rows-[300px] gap-3 sm:grid-cols-2 sm:auto-rows-[320px] sm:gap-4 md:grid-cols-3 md:auto-rows-[clamp(310px,40vw,560px)]">
+            {visibleItems.map((item, index) => (
+              <article key={item.id} className={`${galleryPattern[index % galleryPattern.length]} group relative min-h-0 overflow-hidden rounded-[16px] bg-blush-dark`}>
                 {item.type === 'video' ? (
                   <video
                     src={item.src}
