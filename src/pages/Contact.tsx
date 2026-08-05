@@ -35,8 +35,8 @@ const contactDetails: ContactDetail[] = [
   },
   {
     label: 'Email',
-    value: 'simonwasswa33@gmail.com',
-    href: 'mailto:simonwasswa33@gmail.com',
+    value: 'tendofiona@yahoo.com',
+    href: 'mailto:tendofiona@yahoo.com',
     image: emailIcon,
   },
 ];
