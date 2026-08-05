@@ -13,9 +13,9 @@ The local site runs at `http://localhost:5173`.
 
 ## Email delivery
 
-Contact-form inquiries and Exclusive Circle signups are sent to `tendofiona@yahoo.com` through the server-side `/api/contact` endpoint. The API key is never included in browser code.
+Contact-form inquiries and Exclusive Circle signups are sent to `simonwasswa33@gmail.com` through the server-side `/api/contact` endpoint. The API key is never included in browser code.
 
-1. Create a Resend account using `tendofiona@yahoo.com`.
+1. Create a Resend account using `simonwasswa33@gmail.com`.
 2. Create an API key at [resend.com/api-keys](https://resend.com/api-keys).
 3. Create `.env.local` from `.env.example`.
 4. Set `RESEND_API_KEY` to the generated key.

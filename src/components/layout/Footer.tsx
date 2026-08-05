@@ -71,7 +71,7 @@ export default function Footer() {
                 <img src={social.image} alt="" className="h-7 w-7 object-contain" />
               </a>
             ))}
-            <a href="mailto:tendofiona@yahoo.com" aria-label="Email tendofiona@yahoo.com" className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white transition-transform hover:scale-105">
+            <a href="mailto:simonwasswa33@gmail.com" aria-label="Email simonwasswa33@gmail.com" className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white transition-transform hover:scale-105">
               <img src={emailIcon} alt="" className="h-7 w-7 object-contain" />
             </a>
           </div>
