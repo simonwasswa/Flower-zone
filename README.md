@@ -37,6 +37,21 @@ supabase/migrations/20260803132000_flower_zone_content.sql
 
 Only public publishable credentials belong in `VITE_` variables. Keep `SUPABASE_SERVICE_ROLE_KEY` server-side.
 
+## Admin dashboard
+
+The protected content dashboard is available at `/admin`. It manages gallery items, services,
+occasions, arrangements, testimonials, About stories, shared page sections, and journey steps.
+Uploads are stored in the public Supabase `media` bucket.
+
+To activate the dashboard:
+
+1. In Supabase Authentication, create an email/password user for `simonwasswa33@gmail.com` and mark the email as confirmed.
+2. Run `supabase/migrations/20260805120000_create_admin_policies.sql` in the Supabase SQL editor.
+3. Sign in at `/admin` with that email and the password created in Supabase.
+
+The administrator email is enforced both in the interface and by database Row Level Security.
+Changing it requires updating `src/admin/AdminDashboard.tsx` and the admin-policy migration.
+
 ## Checks
 
 ```bash

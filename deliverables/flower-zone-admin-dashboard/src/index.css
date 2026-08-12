@@ -79,42 +79,6 @@ textarea {
   border-radius: 999px;
 }
 
-.occasion-scroll {
-  scrollbar-color: var(--color-rose) transparent;
-  scrollbar-width: thin;
-  overscroll-behavior-inline: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-.occasion-scroll::-webkit-scrollbar {
-  height: 5px;
-}
-
-.occasion-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.occasion-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-rose);
-  border-radius: 999px;
-}
-
-.occasion-card-reveal {
-  opacity: 0;
-  animation: occasion-card-reveal 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes occasion-card-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
