@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, Images, Play, X } from 'lucide-react';
-import Eyebrow from '../components/ui/Eyebrow';
+import PageBanner from '../components/ui/PageBanner';
+import galleryBanner from '../assets/hero-red-roses-polished.webp';
 import { supabase } from '../lib/supabase';
 import { handleImageError, resolveMediaUrl } from '../lib/media';
 
@@ -118,16 +119,15 @@ export default function Gallery() {
 
   return (
     <div className="min-h-screen bg-[#fffaf8]">
-      <section className="px-5 pb-12 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20">
-        <Eyebrow align="center">Moments in Bloom</Eyebrow>
-        <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-          The Flower Zone Gallery
-        </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-muted sm:text-base">
-          Explore floral stories from intimate surprises, milestone celebrations, weddings, and the hands that bring every arrangement to life.
-        </p>
+      <PageBanner
+        eyebrow="Moments in Bloom"
+        title="The Flower Zone Gallery"
+        subtitle="Explore floral stories from intimate surprises, milestone celebrations, weddings, and the hands that bring every arrangement to life."
+        image={galleryBanner}
+      />
 
-        <div className="mx-auto mt-8 flex w-full max-w-sm rounded-full border border-line bg-white p-1" aria-label="Filter gallery">
+      <section className="px-5 pb-12 pt-6 text-center sm:px-8 sm:pb-14">
+        <div className="mx-auto flex w-full max-w-sm rounded-full border border-line bg-white p-1" aria-label="Filter gallery">
           {(['all', 'photos', 'videos'] as Filter[]).map((option) => (
             <button
               key={option}
@@ -164,7 +164,7 @@ export default function Gallery() {
                   </video>
                 ) : (
                   <button type="button" onClick={() => setActivePhoto(item.id)} className="block h-full w-full text-left" aria-label={`Open ${item.title}`}>
-                    <img src={item.src} alt={item.title} onError={handleImageError} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                    <img src={item.src} alt={item.title} loading="lazy" decoding="async" onError={handleImageError} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
                   </button>
                 )}
 

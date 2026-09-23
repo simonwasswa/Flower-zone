@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, MapPin, Phone, type LucideIcon } from 'lucide-react';
-import Eyebrow from '../components/ui/Eyebrow';
-import emailIcon from '../assets/email-icon.png';
+import PageBanner from '../components/ui/PageBanner';
+import contactBanner from '../assets/hero-pink-bouquet-polished.webp';
+import emailIcon from '../assets/email-icon.webp';
 import { supabase } from '../lib/supabase';
 import { handleImageError, resolveMediaUrl } from '../lib/media';
 
@@ -102,19 +103,14 @@ export default function Contact() {
 
   return (
     <div className="bg-[#fffaf8]">
-      <section className="px-5 pb-14 pt-12 text-center sm:px-8 sm:pb-16 sm:pt-14">
-        <Eyebrow align="center">Get in Touch</Eyebrow>
-        <h1 className="mx-auto mt-5 max-w-[1120px] font-display text-[2.1rem] font-semibold leading-[1.1] text-ink min-[380px]:text-[2.35rem] sm:text-[2.7rem] lg:text-[2.9rem]">
-          Let&apos;s Create Something{' '}
-          <em className="font-medium text-rose-deep">Beautiful</em> Together
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg">
-          Whether it&apos;s a simple bouquet or a grand celebration, our floral designers are
-          ready to bring your vision to life.
-        </p>
-      </section>
+      <PageBanner
+        eyebrow="Get in Touch"
+        title={<>Let&apos;s Create Something <em className="text-rose">Beautiful</em> Together</>}
+        subtitle="Whether it's a simple bouquet or a grand celebration, our floral designers are ready to bring your vision to life."
+        image={contactBanner}
+      />
 
-      <section className="mx-auto grid max-w-[1220px] gap-5 px-5 pb-16 sm:px-8 lg:grid-cols-[1.42fr_1fr] lg:gap-6 lg:pb-20">
+      <section className="mx-auto grid max-w-[1220px] gap-5 px-5 pb-16 pt-10 sm:pt-14 sm:px-8 lg:grid-cols-[1.42fr_1fr] lg:gap-6 lg:pb-20">
         <div id="contact-form" className="rounded-[8px] border border-line/30 bg-white/50 p-5 sm:min-h-[650px] sm:p-10 lg:p-12">
           {submitted ? (
             <div className="flex h-full min-h-[470px] flex-col items-center justify-center text-center">

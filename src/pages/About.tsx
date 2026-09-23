@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EyeOff, Heart, MessageCircle, Play, Sparkles } from 'lucide-react';
+import { EyeOff, Heart, MessageCircle, Sparkles } from 'lucide-react';
+import BlossomBackdrop from '../components/ui/BlossomBackdrop';
+import PageBanner from '../components/ui/PageBanner';
+import aboutBanner from '../assets/hero-wedding-polished.webp';
 import { supabase } from '../lib/supabase';
 import { handleImageError, resolveMediaUrl } from '../lib/media';
 
@@ -67,41 +70,23 @@ export default function About() {
   }, []);
 
   return (
-    <div className="bg-[#fff9f8]">
-      <section className="bg-[#fdf3f2] py-14 sm:py-20">
-        <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 sm:px-8 lg:grid-cols-[.95fr_1.15fr] lg:px-12">
-          <div className="max-w-xl">
-            <span className="inline-flex rounded-full bg-[#f5e1e2] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-rose-deep">
-              Experiential Gifting
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.08] text-ink sm:text-5xl lg:text-[3.25rem]">
-              Crafting Unforgettable <em className="font-medium text-rose-deep">Moments of Joy</em>
-            </h1>
-            <p className="mt-6 max-w-lg text-[15px] leading-7 text-ink-soft">
-              More than just flowers, we orchestrate the perfect surprise. From secret admirations to grand romantic gestures, we make their day extraordinary.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact#contact-form" className="inline-flex w-full min-w-44 items-center justify-center rounded-full bg-[#9d4f52] px-7 py-3.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-rose-deep min-[420px]:w-auto">
-                Plan a Surprise
-              </Link>
-              <Link to="/services" className="inline-flex w-full min-w-40 items-center justify-center rounded-full bg-white/70 px-7 py-3.5 text-sm font-medium text-rose-deep transition-colors hover:bg-white min-[420px]:w-auto">
-                View Packages
-              </Link>
-            </div>
-          </div>
+    <div>
+      <BlossomBackdrop />
+      <PageBanner
+        eyebrow="Experiential Gifting"
+        title={<>Crafting Unforgettable <em className="text-rose">Moments of Joy</em></>}
+        subtitle="More than just flowers, we orchestrate the perfect surprise. From secret admirations to grand romantic gestures, we make their day extraordinary."
+        image={aboutBanner}
+      >
+        <Link to="/contact#contact-form" className="inline-flex min-h-12 w-full items-center justify-center bg-cream px-8 text-sm font-medium text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-rose hover:text-white min-[420px]:w-auto">
+          Plan a Surprise
+        </Link>
+        <Link to="/services" className="inline-flex min-h-12 w-full items-center justify-center border border-cream/80 px-8 text-sm font-medium text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-cream hover:text-ink min-[420px]:w-auto">
+          View Packages
+        </Link>
+      </PageBanner>
 
-          <div className="relative aspect-[16/9] overflow-hidden rounded-[28px] shadow-sm">
-            {displayStories[0]?.image && <img src={displayStories[0].image} alt="A joyful floral surprise delivery" onError={handleImageError} className="h-full w-full object-cover" />}
-            <div className="absolute inset-0 grid place-items-center bg-black/10">
-              <button type="button" aria-label="Play surprise story" className="grid h-20 w-20 place-items-center rounded-full border-[3px] border-white/90 bg-white/35 text-white shadow-lg backdrop-blur-sm transition-transform hover:scale-105">
-                <Play size={25} className="ml-1 fill-current" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-20 sm:py-24">
+      <section className="bg-white/35 py-20 sm:py-24">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="text-center">
             <h2 className="font-display text-3xl font-semibold text-ink">Real Surprises, Real Tears</h2>
@@ -122,7 +107,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#fdf3f2] py-20 sm:py-24">
+      <section className="bg-[#fdf3f2]/45 py-20 sm:py-24">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -177,7 +162,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#fff9f8] py-20 sm:py-24">
+      <section className="bg-[#fff9f8]/25 py-20 sm:py-24">
         <div className="mx-auto max-w-[1220px] px-5 sm:px-8">
           <div className="text-center">
             <h2 className="font-display text-3xl font-semibold text-ink">Your Surprise Journey</h2>

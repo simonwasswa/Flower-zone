@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react';
-import Button from '../ui/Button';
-import Eyebrow from '../ui/Eyebrow';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { Link } from 'react-router-dom';
+import LeafEdge from '../ui/LeafEdge';
 import { supabase } from '../../lib/supabase';
-import { handleImageError, resolveMediaUrl } from '../../lib/media';
-import weddingSlide from '../../assets/hero-wedding-polished.png';
-import giftBasketSlide from '../../assets/hero-gift-basket-polished.png';
-import redRosesSlide from '../../assets/hero-red-roses-polished.png';
-import pinkBouquetSlide from '../../assets/hero-pink-bouquet-polished.png';
+import { handleImageError } from '../../lib/media';
+import weddingSlide from '../../assets/hero-wedding-polished.webp';
+import giftBasketSlide from '../../assets/hero-gift-basket-polished.webp';
+import redRosesSlide from '../../assets/hero-red-roses-polished.webp';
+import pinkBouquetSlide from '../../assets/hero-pink-bouquet-polished.webp';
 
 const fallbackHero = {
   eyebrow: 'Premium Occasion Specialists',
   title: "Flower Zone: Artistry for Life's Major Moments",
   body: 'From breathtaking weddings to intimate surprises, we specialize in premium floral services that transform occasions into unforgettable memories. Bespoke, elegant, and delivered with unmatched sophistication.',
-  image: '',
   ctaLabel: 'Book a Consultation',
   ctaHref: '/contact#contact-form',
   secondaryCtaLabel: 'Explore Gallery',
   secondaryCtaHref: '/gallery',
 };
 
+const heroSlides = [pinkBouquetSlide, weddingSlide, giftBasketSlide, redRosesSlide];
+
+function enterDelay(ms: number) {
+  return { '--enter-delay': `${ms}ms` } as CSSProperties;
+}
+
 export default function Hero() {
-  const navigate = useNavigate();
   const [hero, setHero] = useState(fallbackHero);
   const [activeSlide, setActiveSlide] = useState(0);
-  const heroSlides = [weddingSlide, giftBasketSlide, redRosesSlide, pinkBouquetSlide];
 
   useEffect(() => {
     let cancelled = false;
@@ -32,7 +34,7 @@ export default function Hero() {
     async function loadHero() {
       const { data, error } = await supabase
         .from('site_sections')
-        .select('eyebrow,title,body,image_url,cta_label,cta_href,secondary_cta_label,secondary_cta_href,updated_at')
+        .select('eyebrow,title,body,cta_label,cta_href,secondary_cta_label,secondary_cta_href')
         .eq('page_key', 'home')
         .eq('section_key', 'hero')
         .eq('is_published', true)
@@ -43,7 +45,6 @@ export default function Hero() {
         eyebrow: data.eyebrow || fallbackHero.eyebrow,
         title: data.title || fallbackHero.title,
         body: data.body || fallbackHero.body,
-        image: resolveMediaUrl(data.image_url, data.updated_at || Date.now()),
         ctaLabel: data.cta_label || fallbackHero.ctaLabel,
         ctaHref: data.cta_href || fallbackHero.ctaHref,
         secondaryCtaLabel: data.secondary_cta_label || fallbackHero.secondaryCtaLabel,
@@ -64,13 +65,13 @@ export default function Hero() {
 
     const interval = window.setInterval(() => {
       setActiveSlide((current) => (current + 1) % heroSlides.length);
-    }, 3000);
+    }, 6000);
 
     return () => window.clearInterval(interval);
-  }, [heroSlides.length]);
+  }, []);
 
   return (
-    <section className="relative isolate min-h-[560px] overflow-hidden bg-[#fcf5f2] sm:min-h-[630px] lg:min-h-[720px]">
+    <section data-header-dark className="relative isolate flex min-h-[640px] items-center overflow-hidden bg-ink h-[100svh] max-h-[920px]">
       {heroSlides.map((slide, index) => (
         <img
           key={slide}
@@ -78,33 +79,72 @@ export default function Hero() {
           alt={index === activeSlide ? 'Premium Flower Zone floral arrangement' : ''}
           aria-hidden={index !== activeSlide}
           onError={handleImageError}
-          className={`${index === activeSlide ? 'opacity-100' : 'opacity-0'} absolute inset-0 -z-30 h-full w-full object-cover object-[68%_center] transition-opacity duration-1000 ease-in-out`}
+          decoding="async"
+          className={`${
+            index === activeSlide ? 'scale-110 opacity-100' : 'scale-100 opacity-0'
+          } absolute inset-0 -z-20 h-full w-full object-cover object-[68%_center] [transition:opacity_1.4s_ease,transform_9s_ease-out]`}
         />
       ))}
-      <div className="absolute inset-0 -z-20 bg-[#fcf5f2]/35 lg:bg-transparent" />
+      <div className="absolute inset-0 -z-10 bg-ink/45 md:bg-ink/10 lg:bg-transparent" />
       <div
         className="absolute inset-0 -z-10"
         style={{
           background:
-            'linear-gradient(90deg, #fcf5f2 0%, rgba(252,245,242,0.98) 30%, rgba(252,245,242,0.86) 45%, rgba(252,245,242,0.32) 67%, rgba(252,245,242,0.06) 100%)',
+            'linear-gradient(90deg, rgba(48,40,39,0.9) 0%, rgba(48,40,39,0.72) 38%, rgba(48,40,39,0.28) 68%, rgba(48,40,39,0.12) 100%), linear-gradient(0deg, rgba(48,40,39,0.35), transparent 40%)',
         }}
       />
 
-      <div className="mx-auto flex min-h-[560px] max-w-[1440px] items-center px-5 py-14 sm:min-h-[630px] sm:px-8 sm:py-16 md:py-20 lg:min-h-[720px] lg:px-12">
-        <div className="max-w-[760px]">
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <h1 className="mt-4 max-w-[15ch] font-display text-4xl font-semibold leading-[1.08] text-ink sm:text-5xl lg:text-[3.65rem]">
+      <div className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-28 sm:px-8 lg:px-12">
+        <div className="max-w-[620px]">
+          <p className="hero-enter text-xs font-medium uppercase tracking-[0.28em] text-rose" style={enterDelay(150)}>
+            {hero.eyebrow}
+          </p>
+          <h1
+            className="hero-enter mt-5 font-display text-[2.6rem] font-normal leading-[1.1] text-cream sm:text-6xl lg:text-[4.1rem]"
+            style={enterDelay(300)}
+          >
             {hero.title}
           </h1>
-          <p className="mt-7 max-w-[620px] text-[15px] leading-7 text-ink-soft sm:text-base sm:leading-8">
+          <p className="hero-enter mt-8 max-w-[520px] text-[15px] leading-7 text-cream/80" style={enterDelay(500)}>
             {hero.body}
           </p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Button className="w-full min-[420px]:w-auto" variant="primary" onClick={() => navigate(hero.ctaHref)}>{hero.ctaLabel}</Button>
-            <Button className="w-full min-[420px]:w-auto" variant="outline" onClick={() => navigate(hero.secondaryCtaHref)}>{hero.secondaryCtaLabel}</Button>
+          <div className="hero-enter mt-10 flex flex-wrap gap-4" style={enterDelay(700)}>
+            <Link
+              to={hero.ctaHref}
+              className="inline-flex min-h-12 w-full items-center justify-center bg-cream px-8 text-sm font-medium text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-rose hover:text-white hover:shadow-lg min-[420px]:w-auto"
+            >
+              {hero.ctaLabel}
+            </Link>
+            <Link
+              to={hero.secondaryCtaHref}
+              className="inline-flex min-h-12 w-full items-center justify-center border border-cream/80 px-8 text-sm font-medium text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-cream hover:text-ink min-[420px]:w-auto"
+            >
+              {hero.secondaryCtaLabel}
+            </Link>
           </div>
         </div>
+
+        <div className="hero-enter mt-12 flex gap-2" style={enterDelay(900)} aria-label="Hero slides">
+          {heroSlides.map((slide, index) => (
+            <button
+              key={slide}
+              type="button"
+              onClick={() => setActiveSlide(index)}
+              aria-label={`Show slide ${index + 1}`}
+              aria-current={index === activeSlide}
+              className="group grid h-8 place-items-center"
+            >
+              <span
+                className={`block h-0.5 rounded-full transition-all duration-500 ${
+                  index === activeSlide ? 'w-10 bg-cream' : 'w-5 bg-cream/40 group-hover:bg-cream/70'
+                }`}
+              />
+            </button>
+          ))}
+        </div>
       </div>
+
+      <LeafEdge position="bottom" />
     </section>
   );
 }

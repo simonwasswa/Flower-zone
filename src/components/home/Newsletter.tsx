@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '../ui/Button';
+import Reveal from '../ui/Reveal';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
@@ -32,36 +32,40 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#fffaf8] py-16 sm:py-20">
-      <span className="absolute -bottom-10 -right-8 h-36 w-36 rounded-full border-[12px] border-blush/80" aria-hidden="true" />
-      <div className="mx-auto max-w-2xl px-5 sm:px-8 text-center">
-        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">The Exclusive Circle</h2>
-        <p className="mt-3 text-sm text-muted">
-          Join our mailing list for priority booking on seasonal collections and expert floral
-          styling advice.
+    <section className="px-5 py-20 sm:px-8 sm:py-24">
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <h2 className="font-display text-3xl text-ink sm:text-4xl">Join The Exclusive Circle</h2>
+        <p className="mt-3 text-sm text-ink-soft">
+          Priority booking on seasonal collections and expert floral styling advice, straight to your inbox.
         </p>
 
         {submitted ? (
-          <p className="mt-6 text-sm font-medium text-rose-deep">
-            You're on the list &mdash; welcome to the Exclusive Circle.
+          <p className="mt-8 text-sm font-medium text-rose-deep" role="status">
+            You&apos;re on the list &mdash; welcome to the Exclusive Circle.
           </p>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:justify-center">
+          <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-2xl flex-col shadow-[0_18px_40px_-24px_rgba(48,40,39,0.45)] sm:flex-row">
+            <label htmlFor="newsletter-email" className="sr-only">Email address</label>
             <input
+              id="newsletter-email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              className="w-full sm:w-72 rounded-full border border-line bg-white px-5 py-3 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-rose"
+              placeholder="Enter your email"
+              className="min-h-14 flex-1 bg-white px-5 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose"
             />
-            <Button type="submit" variant="dark" disabled={sending}>
-              {sending ? 'Sending...' : 'Subscribe'}
-            </Button>
+            <button
+              type="submit"
+              disabled={sending}
+              className="min-h-14 bg-rose-deep px-10 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-ink disabled:opacity-70"
+            >
+              {sending ? 'Sending…' : 'Subscribe'}
+            </button>
           </form>
         )}
         {error && <p className="mt-3 text-sm text-red-700" role="alert">{error}</p>}
-      </div>
+      </Reveal>
     </section>
   );
 }

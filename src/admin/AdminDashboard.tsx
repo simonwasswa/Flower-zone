@@ -19,7 +19,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import flowerZoneLogo from '../assets/flower-zone-logo-2026.png';
+import flowerZoneLogo from '../assets/flower-zone-logo-2026.webp';
 import { supabase } from '../lib/supabase';
 import { adminResources, type AdminResource } from './config';
 import ResourceManager from './ResourceManager';
