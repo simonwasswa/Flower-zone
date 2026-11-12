@@ -30,7 +30,7 @@ function DrawnIcon({ icon: Icon }: { icon: LucideIcon }) {
 
 export default function WhyUs() {
   return (
-    <section className="bg-cream px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-20">
+    <section id="why-us" className="bloom-wash px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-20">
       <OrnamentTitle>Why Flower Zone?</OrnamentTitle>
 
       <ul className="mx-auto mt-14 grid max-w-[1040px] grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">

@@ -12,6 +12,16 @@
   --color-muted: #8b7d7a;
   --color-line: #eadfdd;
 
+  /* Warm whites: never pure #fff on the public site, so cards sit softly on cream. */
+  --color-petal: #fdf5f3;
+  --color-field: #f9f0ee;
+  /* Deep rose family for strong accents and buttons. */
+  --color-wine: #9a5458;
+  --color-wine-deep: #7e4146;
+  --color-mauve: #7b5a63;
+  /* Warm dark, used instead of flat brown-black behind dark sections. */
+  --color-plum: #2e2226;
+
   --font-display: 'Playfair Display', ui-serif, Georgia, serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
@@ -458,4 +468,451 @@ textarea {
 /* Keep in-page link targets clear of the fixed header. */
 [id] {
   scroll-margin-top: 96px;
+}
+
+/* ============================================================
+   Signature motion layer
+   ============================================================ */
+
+/* ---------- Hero title: words rise out of masks ---------- */
+
+.split-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.split-word {
+  display: inline-block;
+  transform: translateY(110%) rotate(4deg);
+  transform-origin: 0% 100%;
+  animation: split-word 1100ms cubic-bezier(0.22, 1, 0.36, 1) var(--word-delay, 0ms) forwards;
+}
+
+@keyframes split-word {
+  to {
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* ---------- Hero extras ---------- */
+
+.hero-glow {
+  width: 46rem;
+  height: 46rem;
+  left: -14rem;
+  bottom: -20rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(219 152 153 / 0.35), transparent 65%);
+  filter: blur(10px);
+  animation: hero-glow 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes hero-glow {
+  to {
+    transform: translate3d(8rem, -6rem, 0) scale(1.15);
+  }
+}
+
+.slide-progress {
+  transform: scaleX(0);
+  animation: slide-progress var(--slide-ms, 6000ms) linear forwards;
+}
+
+@keyframes slide-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.slide-number {
+  animation: slide-number 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slide-number {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+}
+
+.scroll-cue-line::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 40%;
+  background: var(--color-cream);
+  animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes scroll-cue {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(260%);
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+.magnetic {
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-sheen:hover::after {
+  transform: translateX(120%);
+}
+
+.btn-fill {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-fill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-cream);
+  clip-path: circle(0% at 50% 100%);
+  transition: clip-path 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-fill:hover::before {
+  clip-path: circle(150% at 50% 100%);
+}
+
+/* ---------- Section titles: letters bloom in ---------- */
+
+.title-char {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(0.4em);
+  transition:
+    opacity 700ms ease,
+    filter 700ms ease,
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i) * 35ms + 100ms);
+}
+
+.is-visible .title-char {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* ---------- Occasion ribbon ---------- */
+
+.ribbon-track {
+  animation: ribbon 38s linear infinite;
+}
+
+.ribbon-track-reverse {
+  animation-direction: reverse;
+  animation-duration: 46s;
+}
+
+.ribbon-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ribbon {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ribbon-flower {
+  animation: ribbon-spin 9s linear infinite;
+}
+
+@keyframes ribbon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Catalog card tilt ---------- */
+
+.tilt-card {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+}
+
+.tilt-card.is-tilting {
+  transition-duration: 180ms;
+}
+
+.tilt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgb(255 255 255 / 0.45), transparent 55%);
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  transition: opacity 400ms ease;
+}
+
+.tilt-card.is-tilting::after {
+  opacity: 1;
+}
+
+/* ---------- Scroll progress ---------- */
+
+.scroll-progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-rose-deep), var(--color-rose), #f6d3d6);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* ---------- Page curtain ---------- */
+
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, var(--color-blush) 0%, var(--color-blush-dark) 70%);
+  animation: page-curtain 1100ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes page-curtain {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+  38%,
+  55% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+.page-curtain-bloom {
+  width: 72px;
+  height: 72px;
+  fill: var(--color-rose);
+  animation: page-curtain-bloom 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.page-curtain-heart {
+  fill: var(--color-cream);
+}
+
+@keyframes page-curtain-bloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-90deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2) rotate(40deg) translateY(-30px);
+  }
+}
+
+/* ---------- Custom cursor (precise mouse only) ---------- */
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.cursor-active .cursor-dot,
+.cursor-active .cursor-ring {
+  opacity: 1;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--color-rose-deep);
+}
+
+.cursor-ring-shape {
+  position: absolute;
+  left: -18px;
+  top: -18px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgb(167 95 96 / 0.55);
+  border-radius: 50%;
+  transition:
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+
+.cursor-ring-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  opacity: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  transition:
+    opacity 300ms ease,
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cursor-ring[data-state='link'] .cursor-ring-shape {
+  transform: scale(1.6);
+  background: rgb(219 152 153 / 0.18);
+  border-color: transparent;
+}
+
+.cursor-ring[data-state='view'] .cursor-ring-shape {
+  transform: scale(2.3);
+  background: rgb(167 95 96 / 0.85);
+  border-color: transparent;
+  backdrop-filter: blur(2px);
+}
+
+.cursor-ring[data-state='view'] .cursor-ring-label {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cursor-ring[data-pressed] .cursor-ring-shape {
+  transform: scale(0.8);
+}
+
+/* ---------- Film grain for a printed, premium feel ---------- */
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- Respect reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .split-word,
+  .title-char {
+    transform: none;
+    opacity: 1;
+    filter: none;
+    animation: none;
+  }
+  .hero-glow,
+  .ribbon-track,
+  .ribbon-flower,
+  .scroll-cue-line::after,
+  body::after {
+    animation: none;
+  }
+  .page-curtain,
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Colour blending
+   ============================================================ */
+
+/* Cream section with faint rose blooms in the corners. Starts and ends on plain
+   cream, so it meets the leaf edges and neighbouring sections without a seam. */
+.bloom-wash {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(ellipse 45% 40% at 0% 30%, rgb(238 219 216 / 0.55), transparent 70%),
+    radial-gradient(ellipse 40% 45% at 100% 70%, rgb(219 152 153 / 0.16), transparent 70%),
+    linear-gradient(180deg, var(--color-cream) 0%, #fcf1ef 50%, var(--color-cream) 100%);
+}
+
+/* A blush glow pooled behind the centre of a section. */
+.glow-wash {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(ellipse 50% 45% at 50% 55%, rgb(219 152 153 / 0.22), transparent 70%),
+    linear-gradient(180deg, var(--color-cream) 0%, #fbefed 50%, var(--color-cream) 100%);
+}
+
+/* Dark sections: warm plum with a wine glow instead of flat brown-black. */
+.ink-wash {
+  background-color: var(--color-plum);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgb(154 84 88 / 0.35), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 90% 100%, rgb(219 152 153 / 0.14), transparent 70%),
+    linear-gradient(180deg, var(--color-plum), var(--color-ink));
+}
+
+.ribbon-ink {
+  background: linear-gradient(90deg, var(--color-plum), var(--color-wine-deep) 50%, var(--color-plum));
+}
+
+.catalog-tint {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgb(154 84 88 / 0.25), transparent 75%),
+    linear-gradient(180deg, rgb(46 34 38 / 0.82), rgb(46 34 38 / 0.62) 50%, rgb(46 34 38 / 0.85));
 }

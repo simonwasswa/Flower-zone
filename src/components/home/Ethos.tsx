@@ -27,7 +27,7 @@ export default function Ethos() {
   }, []);
 
   return (
-    <section className="bg-[#f7eaea] py-16 sm:py-24">
+    <section className="bg-blush py-16 sm:py-24">
       <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:px-12">
         <div className="grid grid-cols-[1fr_1.08fr] gap-4">
           <div className="flex flex-col gap-4">

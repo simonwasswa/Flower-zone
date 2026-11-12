@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { ChevronLeft, ChevronRight, Flower2, Heart } from 'lucide-react';
 import LeafEdge from '../ui/LeafEdge';
 import OrnamentTitle from '../ui/OrnamentTitle';
@@ -31,6 +31,27 @@ const fallbackItems: CatalogItem[] = products.map(({ id, name, tag, image }) => 
   image: image || fallbackImages[id] || '',
 }));
 const loadingItems: CatalogItem[] = Array.from({ length: 5 }, (_, index) => ({ id: `loading-${index}`, name: '', tag: '', image: '' }));
+
+// The featured card tips toward the mouse, with a soft highlight following the pointer.
+function tilt(event: ReactPointerEvent<HTMLLIElement>) {
+  if (event.pointerType !== 'mouse') return;
+  const card = event.currentTarget;
+  const box = card.getBoundingClientRect();
+  const x = (event.clientX - box.left) / box.width;
+  const y = (event.clientY - box.top) / box.height;
+  card.classList.add('is-tilting');
+  card.style.setProperty('--ry', `${(x - 0.5) * 14}deg`);
+  card.style.setProperty('--rx', `${(0.5 - y) * 12}deg`);
+  card.style.setProperty('--gx', `${x * 100}%`);
+  card.style.setProperty('--gy', `${y * 100}%`);
+}
+
+function untilt(event: ReactPointerEvent<HTMLLIElement>) {
+  const card = event.currentTarget;
+  card.classList.remove('is-tilting');
+  card.style.removeProperty('--ry');
+  card.style.removeProperty('--rx');
+}
 
 function orderLink(name: string) {
   const message = `Hello Flower Zone, I'd like to order the ${name} arrangement.`;
@@ -106,7 +127,7 @@ export default function Catalog() {
   return (
     <section
       data-header-dark
-      className="relative isolate overflow-hidden bg-ink pb-36 pt-36 sm:pb-44 sm:pt-44"
+      className="relative isolate overflow-hidden bg-plum pb-36 pt-36 sm:pb-44 sm:pt-44"
       aria-roledescription="carousel"
       aria-label="Arrangement catalogue"
       onMouseEnter={() => setPaused(true)}
@@ -115,7 +136,7 @@ export default function Catalog() {
       onBlur={() => setPaused(false)}
     >
       <img src={backdrop} alt="" aria-hidden="true" loading="lazy" decoding="async" className="absolute inset-0 -z-20 h-full w-full scale-110 object-cover blur-[6px]" />
-      <div className="absolute inset-0 -z-10 bg-ink/65" />
+      <div className="catalog-tint absolute inset-0 -z-10" />
       <LeafEdge position="top" />
 
       <OrnamentTitle light>Our Catalogue</OrnamentTitle>
@@ -147,7 +168,10 @@ export default function Catalog() {
                 <li
                   key={item.id}
                   aria-hidden={!isActive}
-                  className={`relative w-[var(--card-w)] shrink-0 p-4 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  onPointerMove={isActive ? tilt : undefined}
+                  onPointerLeave={untilt}
+                  style={isActive ? undefined : ({ '--rx': '0deg', '--ry': '0deg' } as CSSProperties)}
+                  className={`tilt-card relative w-[var(--card-w)] shrink-0 p-4 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
                       ? 'z-10 scale-[1.08] bg-cream shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55)]'
                       : 'scale-[0.92] bg-blush-dark/80 opacity-75 hover:opacity-95'
@@ -165,6 +189,7 @@ export default function Catalog() {
                         src={item.image}
                         alt={item.name}
                         draggable={false}
+                        data-cursor="view"
                         loading="lazy"
                         decoding="async"
                         onError={handleImageError}

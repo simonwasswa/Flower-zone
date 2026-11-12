@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabase';
 import { handleImageError, resolveMediaUrl } from '../lib/media';
 
 const fieldClass =
-  'mt-2 w-full rounded-[8px] border border-transparent bg-[#faf5f3] px-4 py-3.5 text-base text-ink outline-none transition-colors placeholder:text-[#c1b4b0] focus:border-rose focus:bg-white focus:ring-2 focus:ring-rose/20 sm:text-sm';
+  'mt-2 w-full rounded-[8px] border border-transparent bg-field px-4 py-3.5 text-base text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-rose focus:bg-petal focus:ring-2 focus:ring-rose/20 sm:text-sm';
 
 const fallbackEventImage =
   'https://images.pexels.com/photos/5414007/pexels-photo-5414007.jpeg?auto=compress&cs=tinysrgb&w=1200';
@@ -102,7 +102,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="bg-[#fffaf8]">
+    <div className="bloom-wash">
       <PageBanner
         eyebrow="Get in Touch"
         title={<>Let&apos;s Create Something <em className="text-rose">Beautiful</em> Together</>}
@@ -111,7 +111,7 @@ export default function Contact() {
       />
 
       <section className="mx-auto grid max-w-[1220px] gap-5 px-5 pb-16 pt-10 sm:pt-14 sm:px-8 lg:grid-cols-[1.42fr_1fr] lg:gap-6 lg:pb-20">
-        <div id="contact-form" className="rounded-[8px] border border-line/30 bg-white/50 p-5 sm:min-h-[650px] sm:p-10 lg:p-12">
+        <div id="contact-form" className="rounded-[8px] border border-line/60 bg-petal/70 shadow-[0_24px_60px_-40px_rgba(154,84,88,0.5)] p-5 sm:min-h-[650px] sm:p-10 lg:p-12">
           {submitted ? (
             <div className="flex h-full min-h-[470px] flex-col items-center justify-center text-center">
               <span className="grid h-14 w-14 place-items-center rounded-full bg-blush text-rose-deep">
@@ -160,7 +160,7 @@ export default function Contact() {
 
                 {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
 
-                <button disabled={sending} type="submit" className="inline-flex w-full min-w-44 items-center justify-center rounded-full bg-[#9d4f52] px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-rose-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-deep disabled:cursor-wait disabled:opacity-60 sm:w-auto">
+                <button disabled={sending} type="submit" className="inline-flex w-full min-w-44 items-center justify-center rounded-full bg-wine hover:bg-wine-deep px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-rose-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-deep disabled:cursor-wait disabled:opacity-60 sm:w-auto">
                   {sending ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
@@ -169,12 +169,12 @@ export default function Contact() {
         </div>
 
         <div>
-          <aside className="rounded-[28px] bg-[#f0e8e7] p-7 sm:p-9">
+          <aside className="rounded-[28px] bg-blush p-7 sm:p-9">
             <h2 className="font-display text-2xl font-semibold text-rose-deep">The Studio</h2>
             <div className="mt-7 space-y-5">
               {contactDetails.map((detail) => (
                 <a key={detail.label} href={detail.href} className="group flex items-start gap-4">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-rose-deep transition-colors group-hover:bg-rose-deep group-hover:text-white">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-petal text-rose-deep transition-colors group-hover:bg-rose-deep group-hover:text-white">
                     {detail.image ? (
                       <img src={detail.image} alt="" className="h-7 w-7 object-contain" />
                     ) : detail.icon ? (
@@ -189,7 +189,7 @@ export default function Contact() {
               ))}
             </div>
 
-            <div className="mt-7 border-t border-[#d9c4c2] pt-6">
+            <div className="mt-7 border-t border-blush-dark pt-6">
               <h3 className="text-sm font-semibold text-ink">Studio Hours</h3>
               <dl className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-2 text-sm text-ink-soft sm:gap-x-5">
                 <dt>Mon - Fri</dt><dd>9:00 AM - 6:00 PM</dd>
@@ -211,7 +211,7 @@ export default function Contact() {
               Planning a wedding, gala, or a heartfelt farewell? Our lead designers offer private consultations to ensure every petal reflects your story perfectly.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <a href="#contact-form" className="inline-flex w-full min-w-48 items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-rose-deep transition-colors hover:bg-blush min-[420px]:w-auto">
+              <a href="#contact-form" className="inline-flex w-full min-w-48 items-center justify-center rounded-full bg-cream px-6 py-3 text-sm font-medium text-rose-deep transition-colors hover:bg-blush min-[420px]:w-auto">
                 Book a Consultation
               </a>
               <Link to="/services" className="inline-flex w-full min-w-40 items-center justify-center rounded-full border border-white/70 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white hover:text-ink min-[420px]:w-auto">
