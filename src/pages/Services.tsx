@@ -27,7 +27,7 @@ const zones = [
       'We create joyful birthday florals around the recipient’s personality, favourite colours, and celebration style. Every design is prepared fresh in our Kampala studio and can be paired with a thoughtful message.',
     includes: ['Personalised bouquet or vase arrangement', 'Custom colour and flower selection', 'Handwritten message card', 'Scheduled delivery across Kampala'],
     className: 'lg:col-span-2',
-    buttonClass: 'bg-[#df9298] text-ink hover:bg-[#e9aab0]',
+    buttonClass: 'bg-rose text-ink hover:bg-[#e9aab0]',
   },
   {
     id: 'romance',
@@ -39,7 +39,7 @@ const zones = [
       'Designed for anniversaries, proposals, and meaningful romantic gestures, this package combines expressive flowers with discreet planning for a memorable reveal.',
     includes: ['Romantic floral arrangement', 'Personal message presentation', 'Surprise delivery coordination', 'Optional room or dinner-table styling'],
     className: '',
-    buttonClass: 'bg-[#a75358] text-white hover:bg-[#94474c]',
+    buttonClass: 'bg-wine text-white hover:bg-wine-deep',
   },
   {
     id: 'wedding',
@@ -51,7 +51,7 @@ const zones = [
       'Our wedding service brings a consistent floral story to every part of your day, from personal flowers to ceremony and reception styling.',
     includes: ['Bride and bridal-party bouquets', 'Buttonholes and corsages', 'Ceremony and reception florals', 'Venue setup and floral styling'],
     className: '',
-    buttonClass: 'bg-white text-rose-deep hover:bg-blush',
+    buttonClass: 'bg-petal text-rose-deep hover:bg-blush',
   },
   {
     id: 'sympathy',
@@ -63,7 +63,7 @@ const zones = [
       'Created with sensitivity and care, our tribute arrangements help families express remembrance, comfort, and respect through flowers.',
     includes: ['Wreaths, sprays, or casket flowers', 'Family colour and flower preferences', 'Message ribbon or sympathy card', 'Timely delivery to the selected venue'],
     className: '',
-    buttonClass: 'bg-[#625e60] text-white hover:bg-[#4c484a]',
+    buttonClass: 'bg-mauve text-white hover:bg-[#674a52]',
   },
   {
     id: 'surprise',
@@ -143,7 +143,7 @@ const localBandImages = [redRosesPhoto, bridalGlowPhoto, weddingPhoto, bespokePh
 function TicketCard({ number, action, children }: { number: number; action?: ReactNode; children: ReactNode }) {
   return (
     <div className="group h-full drop-shadow-[0_18px_28px_rgba(48,40,39,0.12)] transition-transform duration-500 hover:-translate-y-1.5">
-      <article className="ticket-card flex h-full flex-col bg-white">
+      <article className="ticket-card flex h-full flex-col bg-petal">
         {children}
         <div className="mx-5 border-t border-dashed border-line" />
         <div className={`flex h-[67px] items-center px-6 ${action ? 'justify-between' : 'justify-center'}`}>
@@ -257,7 +257,7 @@ export default function Services() {
       </section>
 
       {/* In a hurry strip */}
-      <section className="border-y border-line/70 bg-white/70 px-5 py-12 text-center backdrop-blur-sm sm:px-8">
+      <section className="border-y border-line/70 bg-petal/70 px-5 py-12 text-center backdrop-blur-sm sm:px-8">
         <Reveal>
           <h2 className="text-lg font-semibold uppercase tracking-[0.2em] text-ink">In a hurry?</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-ink-soft">
@@ -358,7 +358,7 @@ export default function Services() {
 
       {/* Bespoke split */}
       <section className="grid lg:grid-cols-2">
-        <div className="flex items-center justify-center bg-white/55 px-6 py-20 backdrop-blur-[2px] sm:px-12">
+        <div className="flex items-center justify-center bg-petal/60 px-6 py-20 backdrop-blur-[2px] sm:px-12">
           <Reveal className="max-w-md text-center">
             <h2 className="font-display text-3xl leading-tight text-ink sm:text-[2.6rem]">Looking for Something Bespoke?</h2>
             <p className="mt-5 text-sm leading-7 text-ink-soft">
@@ -407,7 +407,7 @@ export default function Services() {
                 const open = openFaq === id;
                 return (
                   <Reveal key={faq.question} delay={index * 90}>
-                    <div className="bg-white shadow-[0_10px_30px_-22px_rgba(48,40,39,0.5)]">
+                    <div className="bg-petal shadow-[0_10px_30px_-22px_rgba(154,84,88,0.5)]">
                       <button
                         type="button"
                         aria-expanded={open}
@@ -459,7 +459,7 @@ export default function Services() {
 
       {selectedZone && (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-[#241d1d]/75 p-2 backdrop-blur-sm sm:p-8"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-plum/75 p-2 backdrop-blur-sm sm:p-8"
           role="dialog"
           aria-modal="true"
           aria-labelledby="package-title"
@@ -467,7 +467,7 @@ export default function Services() {
             if (event.target === event.currentTarget) setSelectedZone(null);
           }}
         >
-          <div className="relative grid max-h-[calc(100dvh-1rem)] w-full max-w-5xl overflow-y-auto rounded-[16px] bg-[#fffaf8] shadow-2xl sm:max-h-[92vh] sm:rounded-[20px] lg:grid-cols-[.95fr_1.05fr]">
+          <div className="relative grid max-h-[calc(100dvh-1rem)] w-full max-w-5xl overflow-y-auto rounded-[16px] bg-cream shadow-2xl sm:max-h-[92vh] sm:rounded-[20px] lg:grid-cols-[.95fr_1.05fr]">
             <button
               type="button"
               onClick={() => setSelectedZone(null)}

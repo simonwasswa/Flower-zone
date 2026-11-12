@@ -75,7 +75,7 @@ export default function ShopByOccasion() {
   }, [displayOccasions, updateScrollControls]);
 
   return (
-    <section className="bg-[#fffaf8] py-16 sm:py-20">
+    <section className="bg-cream py-16 sm:py-20">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
         <SectionHeading
           title="Shop by Occasion"

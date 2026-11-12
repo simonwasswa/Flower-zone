@@ -118,7 +118,7 @@ export default function Gallery() {
   const selectedPhoto = photoItems.find((item) => item.id === activePhoto);
 
   return (
-    <div className="min-h-screen bg-[#fffaf8]">
+    <div className="min-h-screen bloom-wash">
       <PageBanner
         eyebrow="Moments in Bloom"
         title="The Flower Zone Gallery"
@@ -127,7 +127,7 @@ export default function Gallery() {
       />
 
       <section className="px-5 pb-12 pt-6 text-center sm:px-8 sm:pb-14">
-        <div className="mx-auto flex w-full max-w-sm rounded-full border border-line bg-white p-1" aria-label="Filter gallery">
+        <div className="mx-auto flex w-full max-w-sm rounded-full border border-line bg-petal p-1 shadow-[0_10px_30px_-20px_rgba(154,84,88,0.45)]" aria-label="Filter gallery">
           {(['all', 'photos', 'videos'] as Filter[]).map((option) => (
             <button
               key={option}
@@ -164,7 +164,7 @@ export default function Gallery() {
                   </video>
                 ) : (
                   <button type="button" onClick={() => setActivePhoto(item.id)} className="block h-full w-full text-left" aria-label={`Open ${item.title}`}>
-                    <img src={item.src} alt={item.title} loading="lazy" decoding="async" onError={handleImageError} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                    <img data-cursor="view" src={item.src} alt={item.title} loading="lazy" decoding="async" onError={handleImageError} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
                   </button>
                 )}
 

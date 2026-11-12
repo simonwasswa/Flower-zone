@@ -46,7 +46,7 @@ export default function ClientStories() {
   }, []);
 
   return (
-    <section className="bg-[#fcf5f4] py-16 sm:py-24">
+    <section className="bloom-wash py-16 sm:py-24">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
         <div className="text-center">
           <Eyebrow align="center">Heartfelt Connections</Eyebrow>

@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import ScrollManager from './components/layout/ScrollManager';
+import FancyCursor from './components/ui/FancyCursor';
+import PageCurtain from './components/ui/PageCurtain';
+import ScrollProgress from './components/ui/ScrollProgress';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import About from './pages/About';
@@ -18,6 +21,9 @@ function PublicWebsite() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
+      <ScrollProgress />
+      <FancyCursor />
+      <PageCurtain />
       <Header />
       <main key={pathname} className="page-enter flex-1">
         <Routes>

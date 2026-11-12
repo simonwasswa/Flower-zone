@@ -35,7 +35,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer data-header-dark className="relative bg-ink pb-8 pt-32 text-cream/80 sm:pt-40">
+    <footer data-header-dark className="ink-wash relative pb-8 pt-32 text-cream/80 sm:pt-40">
       <LeafEdge position="top" />
 
       <OrnamentTitle light>Contacts</OrnamentTitle>

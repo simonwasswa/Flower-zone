@@ -29,7 +29,7 @@ const orderChannels = [
 
 export default function Delivery() {
   return (
-    <section className="overflow-hidden bg-cream px-5 pb-28 pt-16 sm:px-8 sm:pb-36 sm:pt-20">
+    <section className="glow-wash overflow-hidden px-5 pb-28 pt-16 sm:px-8 sm:pb-36 sm:pt-20">
       <OrnamentTitle>Delivery</OrnamentTitle>
 
       <div className="relative mx-auto mt-10 max-w-[760px] px-6 py-24 sm:px-24 sm:py-24">

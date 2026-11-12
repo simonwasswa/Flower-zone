@@ -36,7 +36,7 @@ export default function MostLoved() {
   }, []);
 
   return (
-    <section className="bg-[#fffaf8] py-16 sm:py-24">
+    <section className="bg-cream py-16 sm:py-24">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
       <SectionHeading
         align="center"

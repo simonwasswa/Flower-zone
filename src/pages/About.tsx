@@ -97,7 +97,7 @@ export default function About() {
               <article key={story.title} className="group relative aspect-[4/5] overflow-hidden rounded-[24px] bg-blush-dark">
                 {story.image && <img src={story.image} alt={story.title} onError={handleImageError} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-                <div className="absolute inset-x-4 bottom-4 rounded-[8px] bg-white/80 px-4 py-3 backdrop-blur-md">
+                <div className="absolute inset-x-4 bottom-4 rounded-[8px] bg-petal/85 px-4 py-3 backdrop-blur-md">
                   <h3 className="text-sm font-medium text-ink">&ldquo;{story.title}&rdquo;</h3>
                   <p className="mt-0.5 text-[11px] text-muted">{story.location}</p>
                 </div>
@@ -107,7 +107,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#fdf3f2]/45 py-20 sm:py-24">
+      <section className="bg-blush/45 py-20 sm:py-24">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -118,7 +118,7 @@ export default function About() {
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-[.92fr_2fr]">
-            <article className="flex min-h-[390px] flex-col rounded-[24px] bg-white p-7 sm:p-9">
+            <article className="flex min-h-[390px] flex-col rounded-[24px] bg-petal p-7 sm:p-9">
               <span className="grid h-11 w-11 place-items-center rounded-full bg-blush text-rose-deep"><EyeOff size={19} /></span>
               <h3 className="mt-7 font-display text-xl font-semibold text-ink">Secret Admirer</h3>
               <p className="mt-3 text-sm leading-6 text-muted">A mysterious, elegant single-stem delivery with a hand-sealed wax note. Perfectly understated.</p>
@@ -132,14 +132,14 @@ export default function About() {
                 <h3 className="font-display text-3xl font-semibold">The Grand Gesture</h3>
                 <p className="mt-3 text-sm leading-6 text-white/85">A floor-to-ceiling floral installation that transforms any room into a botanical wonderland, complete with professional photography of the moment.</p>
                 <div className="mt-6 flex items-center gap-5">
-                  <Link to="/contact#contact-form" className="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-rose-deep">Book Now</Link>
+                  <Link to="/contact#contact-form" className="rounded-full bg-cream px-5 py-2.5 text-sm font-medium text-rose-deep">Book Now</Link>
                 </div>
               </div>
             </article>
           </div>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-            <article className="grid min-h-[220px] overflow-hidden rounded-[24px] bg-[#fff8f7] sm:grid-cols-[1.35fr_.75fr]">
+            <article className="grid min-h-[220px] overflow-hidden rounded-[24px] bg-petal sm:grid-cols-[1.35fr_.75fr]">
               <div className="flex flex-col justify-center p-7 sm:p-9">
                 <h3 className="font-display text-xl font-semibold text-ink">Just Because</h3>
                 <p className="mt-3 text-sm leading-6 text-muted">Weekly subscription for those who believe every Monday deserves a surprise. Fresh seasonal picks delivered with a custom message.</p>
@@ -148,7 +148,7 @@ export default function About() {
               {displayStories[2]?.image && <img src={displayStories[2].image} alt="Seasonal flower subscription arrangement" onError={handleImageError} className="h-full min-h-[220px] w-full object-cover" />}
             </article>
 
-            <article className="flex min-h-[220px] flex-col items-center justify-center rounded-[24px] bg-[#fff8f7] p-8 text-center">
+            <article className="flex min-h-[220px] flex-col items-center justify-center rounded-[24px] bg-petal p-8 text-center">
               <h3 className="font-display text-xl font-semibold text-ink">Thinking of You</h3>
               <p className="mt-3 max-w-md text-sm leading-6 text-muted">A soft palette of lilies and eucalyptus, designed to bring peace and comfort to their doorstep.</p>
               <div className="mt-6 flex -space-x-2">
@@ -162,7 +162,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#fff9f8]/25 py-20 sm:py-24">
+      <section className="bg-cream/25 py-20 sm:py-24">
         <div className="mx-auto max-w-[1220px] px-5 sm:px-8">
           <div className="text-center">
             <h2 className="font-display text-3xl font-semibold text-ink">Your Surprise Journey</h2>
@@ -172,7 +172,7 @@ export default function About() {
             <div className="absolute left-[16.66%] right-[16.66%] top-7 hidden h-px bg-line md:block" />
             {journey.map((step, index) => (
               <article key={step.title} className="relative text-center">
-                <span className={`${index === 2 ? 'bg-rose-deep text-white' : 'bg-white text-rose-deep'} mx-auto grid h-14 w-14 place-items-center rounded-full border border-line shadow-sm`}>
+                <span className={`${index === 2 ? 'bg-rose-deep text-white' : 'bg-petal text-rose-deep'} mx-auto grid h-14 w-14 place-items-center rounded-full border border-line shadow-sm`}>
                   <step.icon size={21} />
                 </span>
                 <h3 className="mt-6 font-display text-lg font-semibold text-ink">{step.title}</h3>
@@ -181,13 +181,13 @@ export default function About() {
             ))}
           </div>
 
-          <div className="relative mx-auto mt-20 max-w-4xl overflow-hidden rounded-[34px] bg-[#9a5458] px-7 py-14 text-center text-white shadow-[0_20px_45px_rgba(100,55,58,.18)] sm:px-12 sm:py-16">
+          <div className="relative mx-auto mt-20 max-w-4xl overflow-hidden rounded-[34px] bg-wine px-7 py-14 text-center text-white shadow-[0_20px_45px_rgba(100,55,58,.18)] sm:px-12 sm:py-16">
             <span className="absolute -bottom-24 -left-20 h-52 w-52 rounded-full bg-white/8" aria-hidden="true" />
             <span className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/8" aria-hidden="true" />
             <div className="relative">
               <h2 className="font-display text-xl font-semibold">Ready to make magic happen?</h2>
               <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/75">Join 2,000+ happy senders who have used Flower Zone to create memories that last far longer than the flowers.</p>
-              <Link to="/contact#contact-form" className="mt-8 inline-flex min-w-52 items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-medium text-rose-deep transition-transform hover:scale-[1.02]">Plan a Surprise</Link>
+              <Link to="/contact#contact-form" className="mt-8 inline-flex min-w-52 items-center justify-center rounded-full bg-cream px-8 py-3.5 text-sm font-medium text-rose-deep transition-transform hover:scale-[1.02]">Plan a Surprise</Link>
               <p className="mt-5 text-xs text-white/55">Average setup time: 10 minutes</p>
             </div>
           </div>
