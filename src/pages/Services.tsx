@@ -1,89 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import { ArrowRight, Check, ChevronDown, Flower2, Gift, MessageCircleHeart, X, type LucideIcon } from 'lucide-react';
+import { ArrowRight, ChevronDown, Flower2, Gift, MessageCircleHeart, type LucideIcon } from 'lucide-react';
 import Newsletter from '../components/home/Newsletter';
 import BlossomBackdrop from '../components/ui/BlossomBackdrop';
-import Eyebrow from '../components/ui/Eyebrow';
 import Reveal from '../components/ui/Reveal';
-import instagramIcon from '../assets/instagram-icon.webp';
 import whatsappIcon from '../assets/whatsapp-icon.webp';
 import heroPhoto from '../assets/hero-gift-basket-polished.webp';
 import bespokePhoto from '../assets/hero-pink-bouquet-polished.webp';
 import redRosesPhoto from '../assets/hero-red-roses-polished.webp';
 import weddingPhoto from '../assets/hero-wedding-polished.webp';
 import bridalGlowPhoto from '../assets/bridal-glow-clean.webp';
-import { supabase } from '../lib/supabase';
-import { handleImageError, resolveMediaUrl } from '../lib/media';
-
-const zones = [
-  {
-    id: 'birthday',
-    title: 'Birthday Zone',
-    description:
-      'Vibrant celebrations and personalized arrangements designed to make their special day bloom with unforgettable joy.',
-    image: '',
-    details:
-      'We create joyful birthday florals around the recipient’s personality, favourite colours, and celebration style. Every design is prepared fresh in our Kampala studio and can be paired with a thoughtful message.',
-    includes: ['Personalised bouquet or vase arrangement', 'Custom colour and flower selection', 'Handwritten message card', 'Scheduled delivery across Kampala'],
-    className: 'lg:col-span-2',
-    buttonClass: 'bg-rose text-ink hover:bg-[#e9aab0]',
-  },
-  {
-    id: 'romance',
-    title: 'Romance Zone',
-    description:
-      'The language of love spoken through velvet roses and delicate petals. Perfect for anniversaries and whispers of affection.',
-    image: '',
-    details:
-      'Designed for anniversaries, proposals, and meaningful romantic gestures, this package combines expressive flowers with discreet planning for a memorable reveal.',
-    includes: ['Romantic floral arrangement', 'Personal message presentation', 'Surprise delivery coordination', 'Optional room or dinner-table styling'],
-    className: '',
-    buttonClass: 'bg-wine text-white hover:bg-wine-deep',
-  },
-  {
-    id: 'wedding',
-    title: 'Wedding Zone',
-    description:
-      'Bridal bouquets and venue styling that turn your forever promise into a living botanical masterpiece.',
-    image: '',
-    details:
-      'Our wedding service brings a consistent floral story to every part of your day, from personal flowers to ceremony and reception styling.',
-    includes: ['Bride and bridal-party bouquets', 'Buttonholes and corsages', 'Ceremony and reception florals', 'Venue setup and floral styling'],
-    className: '',
-    buttonClass: 'bg-petal text-rose-deep hover:bg-blush',
-  },
-  {
-    id: 'sympathy',
-    title: 'Sympathy Zone',
-    description:
-      'Graceful tributes and floral arrangements that offer a silent, beautiful embrace during times of loss and remembrance.',
-    image: '',
-    details:
-      'Created with sensitivity and care, our tribute arrangements help families express remembrance, comfort, and respect through flowers.',
-    includes: ['Wreaths, sprays, or casket flowers', 'Family colour and flower preferences', 'Message ribbon or sympathy card', 'Timely delivery to the selected venue'],
-    className: '',
-    buttonClass: 'bg-mauve text-white hover:bg-[#674a52]',
-  },
-  {
-    id: 'surprise',
-    title: 'Surprise Zone',
-    description:
-      'Eclectic “Just Because” arrangements designed to deliver a spontaneous moment of pure, unadulterated delight.',
-    image: '',
-    details:
-      'For moments that deserve an unexpected burst of happiness, we plan the flowers, presentation, and timing around the person you want to celebrate.',
-    includes: ['Bespoke surprise arrangement', 'Gift and message coordination', 'Discreet delivery planning', 'Optional reveal setup and photography'],
-    className: '',
-    buttonClass: 'bg-[#e88f98] text-ink hover:bg-[#f0a9af]',
-  },
-];
-
-type Zone = (typeof zones)[number];
-
-const serviceStyles: Record<string, Pick<Zone, 'className' | 'buttonClass'>> = Object.fromEntries(
-  zones.map((zone) => [zone.id, { className: zone.className, buttonClass: zone.buttonClass }]),
-);
+import { handleImageError } from '../lib/media';
+import { useServices } from '../lib/useServices';
 
 const steps: { icon: LucideIcon; title: string; text: string }[] = [
   {
@@ -110,7 +39,7 @@ const faqs = [
   },
   {
     question: 'How do I place an order?',
-    answer: 'Open a zone and tap “Inquire on WhatsApp”, or send us your details through the contact form. We’ll confirm flowers, timing, and delivery with you.',
+    answer: 'Open a zone’s page and tap “Inquire on WhatsApp”, or send us your details through the contact form. We’ll confirm flowers, timing, and delivery with you.',
   },
   {
     question: 'Can I choose the colours and flowers?',
@@ -155,75 +84,16 @@ function TicketCard({ number, action, children }: { number: number; action?: Rea
   );
 }
 
-const instagramProfileUrl =
-  'https://www.instagram.com/flowerzone.ug?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==';
-
 export default function Services() {
-  const [displayZones, setDisplayZones] = useState<Zone[]>([]);
-  const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
+  const displayZones = useServices();
+  const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<string | null>('0-0');
 
+  // Older links opened a package pop-up with ?package=slug; send them to the service's own page.
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadServices() {
-      const { data, error } = await supabase
-        .from('services')
-        .select('slug,title,summary,details,image_url,inclusions,sort_order,updated_at')
-        .eq('is_published', true)
-        .order('sort_order');
-
-      if (cancelled) return;
-      if (error) {
-        console.warn('Using local service content:', error.message);
-        return;
-      }
-      if (!data?.length) return;
-
-      const loadedZones = data.map((row) => {
-          const fallback = zones.find((zone) => zone.id === row.slug) ?? zones[0];
-          const styles = serviceStyles[row.slug] ?? serviceStyles.birthday;
-          return {
-            ...fallback,
-            id: row.slug,
-            title: row.title,
-            description: row.summary,
-            details: row.details || row.summary,
-            image: resolveMediaUrl(row.image_url, row.updated_at),
-            includes: row.inclusions?.length ? row.inclusions : fallback.includes,
-            ...styles,
-          };
-        });
-      setDisplayZones(loadedZones);
-
-      const packageId = new URLSearchParams(window.location.search).get('package');
-      if (packageId) setSelectedZone(loadedZones.find((zone) => zone.id === packageId) ?? null);
-    }
-
-    void loadServices();
-    window.addEventListener('focus', loadServices);
-    return () => {
-      cancelled = true;
-      window.removeEventListener('focus', loadServices);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedZone) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') setSelectedZone(null);
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedZone]);
+    const packageId = new URLSearchParams(window.location.search).get('package');
+    if (packageId) navigate(`/services/${packageId}`, { replace: true });
+  }, [navigate]);
 
   const bandImages = [...displayZones.map((zone) => zone.image).filter(Boolean), ...localBandImages];
 
@@ -312,7 +182,7 @@ export default function Services() {
       <section id="zones" className="scroll-mt-20 px-5 pb-20 sm:px-8 sm:pb-24">
         <Reveal className="text-center">
           <h2 className="font-display text-3xl text-ink sm:text-4xl">Our Flower Zones</h2>
-          <p className="mt-3 text-sm text-ink-soft">Choose the zone that fits your occasion and open it to see what&apos;s included.</p>
+          <p className="mt-3 text-sm text-ink-soft">Choose the zone that fits your occasion and open it to see everything it includes.</p>
         </Reveal>
 
         <div className="mx-auto mt-12 flex max-w-[1180px] flex-wrap justify-center gap-6">
@@ -325,13 +195,12 @@ export default function Services() {
               <TicketCard
                 number={index + 1}
                 action={
-                  <button
-                    type="button"
-                    onClick={() => setSelectedZone(zone)}
+                  <Link
+                    to={`/services/${zone.id}`}
                     className="inline-flex min-h-10 items-center gap-1.5 border border-rose-deep px-4 text-xs font-semibold uppercase tracking-[0.12em] text-rose-deep transition-colors hover:bg-rose-deep hover:text-white"
                   >
-                    View Package <ArrowRight size={14} />
-                  </button>
+                    View Zone <ArrowRight size={14} />
+                  </Link>
                 }
               >
                 <div className="m-3 mb-0 aspect-[4/3] overflow-hidden rounded-[10px] bg-blush">
@@ -457,87 +326,6 @@ export default function Services() {
 
       <Newsletter />
 
-      {selectedZone && (
-        <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-plum/75 p-2 backdrop-blur-sm sm:p-8"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="package-title"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setSelectedZone(null);
-          }}
-        >
-          <div className="relative grid max-h-[calc(100dvh-1rem)] w-full max-w-5xl overflow-y-auto rounded-[16px] bg-cream shadow-2xl sm:max-h-[92vh] sm:rounded-[20px] lg:grid-cols-[.95fr_1.05fr]">
-            <button
-              type="button"
-              onClick={() => setSelectedZone(null)}
-              className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-ink shadow-sm transition-colors hover:bg-white hover:text-rose-deep"
-              aria-label="Close package details"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="relative min-h-[230px] overflow-hidden sm:min-h-[300px] lg:min-h-[590px]">
-              {selectedZone.image && (
-                <img
-                  src={selectedZone.image}
-                  alt={`${selectedZone.title} package`}
-                  onError={handleImageError}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
-              <span className="absolute bottom-6 left-6 rounded-full bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-rose-deep backdrop-blur-sm">
-                Flower Zone Kampala
-              </span>
-            </div>
-
-            <div className="flex flex-col justify-center p-5 sm:p-10 lg:p-12">
-              <Eyebrow>Package Details</Eyebrow>
-              <h2 id="package-title" className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
-                {selectedZone.title}
-              </h2>
-              <p className="mt-5 text-sm leading-7 text-ink-soft sm:text-[15px]">
-                {selectedZone.details}
-              </p>
-
-              <h3 className="mt-7 text-sm font-semibold uppercase tracking-[0.12em] text-ink">What&apos;s included</h3>
-              <ul className="mt-4 space-y-3">
-                {selectedZone.includes.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-ink-soft">
-                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blush text-rose-deep">
-                      <Check size={12} strokeWidth={2.5} />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={`https://wa.me/256772262288?text=${encodeURIComponent(`Hello Flower Zone, I would like to inquire about the ${selectedZone.title}.`)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#2f9e5b] px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#27884d] sm:w-fit"
-                >
-                  <img src={whatsappIcon} alt="" className="h-5 w-5 rounded-full object-cover" />
-                  Inquire on WhatsApp
-                </a>
-                <a
-                  href={instagramProfileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#833ab4] via-[#e1306c] to-[#f77737] px-7 py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:w-fit"
-                >
-                  <img src={instagramIcon} alt="" className="h-5 w-5 rounded-md object-cover" />
-                  View on Instagram
-                </a>
-              </div>
-              <p className="mt-3 text-xs text-muted">We&apos;ll confirm availability, flower preferences, and delivery details with you.</p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
