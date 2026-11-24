@@ -12,6 +12,8 @@ import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
+import Feedback from './pages/Feedback';
+import Support from './pages/Support';
 
 // Visitors never need the admin code, so it downloads only when /admin is opened.
 const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
@@ -34,6 +36,8 @@ function PublicWebsite() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/support" element={<Support />} />
         </Routes>
       </main>
       <Footer />

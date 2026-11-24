@@ -24,6 +24,13 @@ const publishingFields: AdminField[] = [
   { key: 'is_published', label: 'Published', type: 'boolean' },
 ];
 
+const SERVICE_OPTIONS = ['birthday', 'romance', 'wedding', 'sympathy', 'surprise'].map((value) => ({
+  label: value.charAt(0).toUpperCase() + value.slice(1),
+  value,
+}));
+
+const ICON_OPTIONS = ['Cake','Camera','Car','Clock','Feather','Flower2','Gem','Gift','Heart','HeartHandshake','Leaf','MapPin','MessageCircleHeart','Palette','PartyPopper','Ribbon','Sparkles','Star'].map((value) => ({ label: value, value }));
+
 export const adminResources: AdminResource[] = [
   {
     table: 'gallery_items',
@@ -59,6 +66,43 @@ export const adminResources: AdminResource[] = [
       { key: 'details', label: 'Full description', type: 'textarea' },
       { key: 'image_url', label: 'Service image', type: 'media', required: true, accept: 'image/*' },
       { key: 'inclusions', label: 'Package inclusions', type: 'list', placeholder: 'One inclusion per line' },
+      { key: 'tagline', label: 'Page tagline', type: 'text', placeholder: 'Flowers that make their day bloom' },
+      { key: 'capabilities', label: 'Feature pills', type: 'list', placeholder: 'One pill per line' },
+      { key: 'steps', label: 'How it works steps', type: 'list', placeholder: 'One step per line, written  Title: description' },
+      { key: 'cta_title', label: 'Closing heading', type: 'text' },
+      { key: 'cta_lead', label: 'Closing text', type: 'textarea' },
+      ...publishingFields,
+    ],
+  },
+  {
+    table: 'service_highlights',
+    label: 'Service highlights',
+    singular: 'service highlight',
+    description: 'The picture-and-description rows on each service page.',
+    titleKey: 'title',
+    subtitleKey: 'service_slug',
+    mediaKey: 'image_url',
+    fields: [
+      { key: 'service_slug', label: 'Service', type: 'select', required: true, options: SERVICE_OPTIONS },
+      { key: 'title', label: 'Heading', type: 'text', required: true },
+      { key: 'body', label: 'Description', type: 'textarea', required: true },
+      { key: 'image_url', label: 'Image', type: 'media', accept: 'image/*' },
+      { key: 'icon', label: 'Icon (shown when there is no image)', type: 'select', options: ICON_OPTIONS },
+      ...publishingFields,
+    ],
+  },
+  {
+    table: 'service_groups',
+    label: 'Service check-lists',
+    singular: 'service check-list',
+    description: 'Heading and check-list sections on each service page.',
+    titleKey: 'title',
+    subtitleKey: 'service_slug',
+    fields: [
+      { key: 'service_slug', label: 'Service', type: 'select', required: true, options: SERVICE_OPTIONS },
+      { key: 'title', label: 'Heading', type: 'text', required: true },
+      { key: 'lead', label: 'Intro text', type: 'textarea' },
+      { key: 'items', label: 'Items', type: 'list', placeholder: 'One item per line, written  Title: description' },
       ...publishingFields,
     ],
   },

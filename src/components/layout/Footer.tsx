@@ -13,6 +13,8 @@ const footerLinks = [
   { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Gallery', href: '/gallery' },
+  { label: 'Feedback', href: '/feedback' },
+  { label: 'Support', href: '/support' },
 ];
 
 const socialLinks = [

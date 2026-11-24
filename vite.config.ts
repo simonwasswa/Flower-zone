@@ -2,6 +2,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { sendContactEmail, type ContactPayload } from './server/contact-mail.js'
+import { customerConfigFromEnv, customerRoutes } from './server/customer-mail.js'
 
 function contactApiPlugin(apiKey?: string, fromEmail?: string): Plugin {
   return {
@@ -33,12 +34,43 @@ function contactApiPlugin(apiKey?: string, fromEmail?: string): Plugin {
   }
 }
 
+/** Local dev versions of /api/support and /api/feedback (Netlify functions handle them in production). */
+function customerApiPlugin(env: Record<string, string>): Plugin {
+  return {
+    name: 'flower-zone-customer-api',
+    configureServer(server) {
+      for (const [path, submit] of Object.entries(customerRoutes)) {
+        server.middlewares.use(path, (request, response, next) => {
+          if (request.method !== 'POST') {
+            next()
+            return
+          }
+          const chunks: Uint8Array[] = []
+          request.on('data', (chunk: Uint8Array) => chunks.push(chunk))
+          request.on('end', async () => {
+            response.setHeader('Content-Type', 'application/json')
+            try {
+              const result = await submit(JSON.parse(Buffer.concat(chunks).toString() || '{}'), customerConfigFromEnv(env))
+              response.statusCode = result.ok ? 200 : result.status
+              response.end(JSON.stringify(result.ok ? { success: true } : { error: result.error }))
+            } catch (error) {
+              console.error(`Local ${path} error:`, error)
+              response.statusCode = 500
+              response.end(JSON.stringify({ error: 'An unexpected error occurred.' }))
+            }
+          })
+        })
+      }
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
-    plugins: [react(), tailwindcss(), contactApiPlugin(env.RESEND_API_KEY, env.CONTACT_FROM_EMAIL)],
+    plugins: [react(), tailwindcss(), contactApiPlugin(env.RESEND_API_KEY, env.CONTACT_FROM_EMAIL), customerApiPlugin(env)],
     server: {
       host: '0.0.0.0',
     },

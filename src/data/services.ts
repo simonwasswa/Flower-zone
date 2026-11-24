@@ -5,7 +5,7 @@ import redRosesPhoto from '../assets/hero-red-roses-polished.webp';
 import weddingPhoto from '../assets/hero-wedding-polished.webp';
 
 export type ServiceStep = { title: string; body: string };
-export type ServiceHighlight = { title: string; body: string; icon: LucideIcon };
+export type ServiceHighlight = { title: string; body: string; icon: LucideIcon; /** Photo from the database; falls back to a matching gallery photo. */ image?: string };
 /** Each service page gets its own colours, like the per-product accent on the reference site. */
 export type ServiceTheme = {
   /** Buttons, dots and highlights. */
@@ -313,3 +313,8 @@ export const defaultSteps: ServiceStep[] = [
   { title: 'We design it fresh', body: 'Our florists prepare your arrangement in our Kampala studio.' },
   { title: 'We deliver the smile', body: 'We schedule delivery across Kampala at a time that suits you.' },
 ];
+
+/** Icons the admin can pick for a highlight row, by name (stored in service_highlights.icon). */
+export const serviceIcons: Record<string, LucideIcon> = {
+  Cake, Camera, Car, Clock, Feather, Flower2, Gem, Gift, Heart, HeartHandshake, Leaf, MapPin, MessageCircleHeart, Palette, PartyPopper, Ribbon, Sparkles, Star,
+};

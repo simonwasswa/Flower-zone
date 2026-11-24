@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { defaultSteps, defaultTheme, services as localServices, type Service } from '../data/services';
+import {
+  defaultSteps,
+  defaultTheme,
+  serviceIcons,
+  services as localServices,
+  type Service,
+  type ServiceGroup,
+  type ServiceHighlight,
+  type ServiceStep,
+} from '../data/services';
 import { resolveMediaUrl } from './media';
 import { supabase } from './supabase';
 
@@ -11,11 +20,46 @@ type ServiceRow = {
   image_url: string | null;
   inclusions: string[] | null;
   updated_at: string | null;
+  // Added by migration 20261123120000; undefined until it has been run.
+  tagline?: string | null;
+  capabilities?: string[] | null;
+  steps?: string[] | null;
+  cta_title?: string | null;
+  cta_lead?: string | null;
 };
 
-// Admin-managed fields (title, summary, image, inclusions) come from Supabase;
-// the richer page content (steps, highlights, groups) comes from src/data/services.ts.
-function mergeRow(row: ServiceRow): Service {
+type HighlightRow = {
+  service_slug: string;
+  title: string;
+  body: string;
+  image_url: string | null;
+  icon: string | null;
+  updated_at: string | null;
+};
+
+type GroupRow = {
+  service_slug: string;
+  title: string;
+  lead: string | null;
+  items: string[] | null;
+};
+
+/** Admin lists store "Title: description" per line. */
+function splitTitled(line: string) {
+  const index = line.indexOf(':');
+  if (index < 0) return { title: line.trim(), body: '' };
+  return { title: line.slice(0, index).trim(), body: line.slice(index + 1).trim() };
+}
+
+function bySlug<T extends { service_slug: string }>(rows: T[] | null) {
+  const map = new Map<string, T[]>();
+  for (const row of rows ?? []) map.set(row.service_slug, [...(map.get(row.service_slug) ?? []), row]);
+  return map;
+}
+
+// Database content wins; src/data/services.ts fills anything the database leaves empty
+// (and supplies the per-service colours, which are design rather than content).
+function mergeRow(row: ServiceRow, highlightRows: HighlightRow[] = [], groupRows: GroupRow[] = []): Service {
   const local = localServices.find((service) => service.id === row.slug);
   const base: Service = local ?? {
     id: row.slug,
@@ -36,14 +80,36 @@ function mergeRow(row: ServiceRow): Service {
     buttonClass: 'bg-rose text-ink hover:bg-[#e9aab0]',
   };
 
+  const steps: ServiceStep[] = (row.steps ?? []).filter(Boolean).map(splitTitled);
+  const highlights: ServiceHighlight[] = highlightRows.map((highlight, index) => ({
+    title: highlight.title,
+    body: highlight.body,
+    icon: serviceIcons[highlight.icon ?? ''] ?? base.highlights[index]?.icon ?? serviceIcons.Sparkles,
+    image: resolveMediaUrl(highlight.image_url, highlight.updated_at ?? undefined) || undefined,
+  }));
+  const groups: ServiceGroup[] = groupRows.map((group) => ({
+    title: group.title,
+    lead: group.lead ?? '',
+    items: (group.items ?? []).filter(Boolean).map(splitTitled),
+  }));
+
   return {
     ...base,
     id: row.slug,
     title: row.title,
+    tagline: row.tagline?.trim() || base.tagline,
     description: row.summary,
     details: row.details || row.summary,
     image: resolveMediaUrl(row.image_url, row.updated_at ?? undefined) || base.image,
     includes: row.inclusions?.length ? row.inclusions : base.includes,
+    capabilities: row.capabilities?.length ? row.capabilities : base.capabilities,
+    steps: steps.length ? steps : base.steps,
+    highlights: highlights.length ? highlights : base.highlights,
+    groups: groups.length ? groups : base.groups,
+    cta: {
+      title: row.cta_title?.trim() || base.cta.title,
+      lead: row.cta_lead?.trim() || base.cta.lead,
+    },
   };
 }
 
@@ -53,15 +119,23 @@ const listeners = new Set<(services: Service[]) => void>();
 
 function fetchServices() {
   pending ??= (async () => {
-    const { data, error } = await supabase
-      .from('services')
-      .select('slug,title,summary,details,image_url,inclusions,sort_order,updated_at')
-      .eq('is_published', true)
-      .order('sort_order');
+    const [services, highlights, groups] = await Promise.all([
+      // select('*') keeps working whether or not the newer columns exist yet.
+      supabase.from('services').select('*').eq('is_published', true).order('sort_order'),
+      supabase
+        .from('service_highlights')
+        .select('service_slug,title,body,image_url,icon,updated_at')
+        .eq('is_published', true)
+        .order('sort_order'),
+      supabase.from('service_groups').select('service_slug,title,lead,items').eq('is_published', true).order('sort_order'),
+    ]);
 
-    if (error) console.warn('Using local service content:', error.message);
-    else if (data?.length) {
-      cache = (data as ServiceRow[]).map(mergeRow);
+    if (services.error) console.warn('Using local service content:', services.error.message);
+    else if (services.data?.length) {
+      // A missing table (migration not run yet) just means local highlights / groups are used.
+      const highlightMap = bySlug(highlights.error ? null : (highlights.data as HighlightRow[]));
+      const groupMap = bySlug(groups.error ? null : (groups.data as GroupRow[]));
+      cache = (services.data as ServiceRow[]).map((row) => mergeRow(row, highlightMap.get(row.slug), groupMap.get(row.slug)));
       listeners.forEach((listener) => listener(cache));
     }
     return cache;

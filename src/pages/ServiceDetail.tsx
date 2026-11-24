@@ -312,7 +312,10 @@ export default function ServiceDetail() {
         <Section key={highlight.title} tone={nextTone()}>
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <Reveal variant="zoom" className={index % 2 === 1 ? 'lg:order-2' : ''}>
-              <HighlightVisual highlight={highlight} photo={highlightPhotos[index]} />
+              <HighlightVisual
+                highlight={highlight}
+                photo={highlight.image ? { src: highlight.image, alt: highlight.title } : highlightPhotos[index]}
+              />
             </Reveal>
             <Reveal delay={90} className="max-w-[30rem]">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">{String(index + 1).padStart(2, '0')}</span>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, Images, Play, X } from 'lucide-react';
 import PageBanner from '../components/ui/PageBanner';
+import VideoReel from '../components/gallery/VideoReel';
 import galleryBanner from '../assets/hero-red-roses-polished.webp';
 import { supabase } from '../lib/supabase';
 import { handleImageError, resolveMediaUrl } from '../lib/media';
 
-type Filter = 'all' | 'photos' | 'videos';
+type Filter = 'photos' | 'videos';
 
 type GalleryItem = {
   id: string;
@@ -34,21 +35,26 @@ const galleryVideoReplacements: Record<string, string> = {
   'Inside the Flower Studio': 'WhatsApp Video 2026-08-04 at 10.51.48 AM.mp4',
 };
 
+// Only use posters uploaded to our own storage; skip stock-photo links (e.g. Pexels).
+function ownPoster(value: string | null | undefined) {
+  if (!value?.trim()) return undefined;
+  const isExternal = /^https?:/i.test(value.trim()) && !value.includes('.supabase.co/');
+  return isExternal ? undefined : value;
+}
+
 function isVideoFile(value: string) {
   return /\.(mp4|webm|mov)(?:[?#].*)?$/i.test(value.trim());
 }
 
 export default function Gallery() {
   const [items, setItems] = useState<GalleryItem[]>([]);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>('photos');
   const [activePhoto, setActivePhoto] = useState<string | null>(null);
 
   const photoItems = items.filter((item) => item.type === 'photo');
-  const visibleItems = items.filter((item) => {
-    if (filter === 'photos') return item.type === 'photo';
-    if (filter === 'videos') return item.type === 'video';
-    return true;
-  });
+  const visibleItems = items.filter((item) =>
+    filter === 'photos' ? item.type === 'photo' : item.type === 'video',
+  );
 
   const activeIndex = photoItems.findIndex((item) => item.id === activePhoto);
 
@@ -81,7 +87,7 @@ export default function Gallery() {
             title: row.title,
             category: row.category,
             src: resolveMediaUrl(sourceUrl, row.updated_at),
-            poster: row.poster_url
+            poster: ownPoster(row.poster_url)
               ? resolveMediaUrl(row.poster_url, row.updated_at)
               : undefined,
           };
@@ -127,8 +133,8 @@ export default function Gallery() {
       />
 
       <section className="px-5 pb-12 pt-6 text-center sm:px-8 sm:pb-14">
-        <div className="mx-auto flex w-full max-w-sm rounded-full border border-line bg-petal p-1 shadow-[0_10px_30px_-20px_rgba(154,84,88,0.45)]" aria-label="Filter gallery">
-          {(['all', 'photos', 'videos'] as Filter[]).map((option) => (
+        <div className="mx-auto flex w-full max-w-xs rounded-full border border-line bg-petal p-1 shadow-[0_10px_30px_-20px_rgba(154,84,88,0.45)]" aria-label="Filter gallery">
+          {(['photos', 'videos'] as Filter[]).map((option) => (
             <button
               key={option}
               type="button"
@@ -142,7 +148,9 @@ export default function Gallery() {
       </section>
 
       <section className="mx-auto max-w-[1440px] px-5 pb-24 sm:px-8 lg:px-12">
-        {visibleItems.length === 0 ? (
+        {filter === 'videos' && visibleItems.length > 0 ? (
+          <VideoReel videos={visibleItems} />
+        ) : visibleItems.length === 0 ? (
           <div className="py-20 text-center text-muted">
             <Images className="mx-auto mb-4" />
             No gallery items found.
@@ -153,7 +161,7 @@ export default function Gallery() {
               <article key={item.id} className={`${galleryPattern[index % galleryPattern.length]} group relative min-h-0 overflow-hidden rounded-[16px] bg-blush-dark`}>
                 {item.type === 'video' ? (
                   <video
-                    src={item.src}
+                    src={item.poster ? item.src : `${item.src}#t=0.1`}
                     controls
                     playsInline
                     preload="metadata"
