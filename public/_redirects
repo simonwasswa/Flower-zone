@@ -1,4 +1,5 @@
 /api/contact   /.netlify/functions/contact   200
 /api/support   /.netlify/functions/support   200
 /api/feedback  /.netlify/functions/feedback  200
+/api/inbound-email  /.netlify/functions/inbound-email  200
 /*    /index.html   200

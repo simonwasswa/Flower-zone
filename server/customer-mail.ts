@@ -9,6 +9,8 @@ export type CustomerMailConfig = {
   fromEmail?: string;
   supabaseUrl?: string;
   supabaseKey?: string;
+  /** Address that receives into the admin inbox; customer confirmations reply here when set. */
+  inboxEmail?: string;
 };
 
 export type CustomerResult = { ok: true } | { ok: false; status: number; error: string };
@@ -153,7 +155,7 @@ export async function submitSupportRequest(payload: Payload, config: CustomerMai
   if (email) {
     emails.push(sendEmail(config, {
       to: [email],
-      replyTo: studioRecipients[0],
+      replyTo: config.inboxEmail || studioRecipients[0],
       subject: 'We received your Flower Zone support request',
       html: '<p>Hello,</p><p>Thank you for contacting Flower Zone. We have received your support request and will get back to you within one business day.</p><p>For anything urgent, message us on WhatsApp: <a href="https://wa.me/256772262288">+256 772 262288</a>.</p><p>Warm regards,<br>The Flower Zone team</p>',
       text: 'Hello,\n\nThank you for contacting Flower Zone. We have received your support request and will get back to you within one business day.\n\nFor anything urgent, message us on WhatsApp: +256 772 262288.\n\nWarm regards,\nThe Flower Zone team',
@@ -221,6 +223,7 @@ export function customerConfigFromEnv(env: Record<string, string | undefined>): 
     fromEmail: env.CONTACT_FROM_EMAIL,
     supabaseUrl: env.VITE_SUPABASE_URL,
     supabaseKey: env.VITE_SUPABASE_ANON_KEY,
+    inboxEmail: env.INBOX_EMAIL,
   };
 }
 
