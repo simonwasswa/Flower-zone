@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -14,9 +13,6 @@ import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
 import Feedback from './pages/Feedback';
 import Support from './pages/Support';
-
-// Visitors never need the admin code, so it downloads only when /admin is opened.
-const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
 
 
 function PublicWebsite() {
@@ -50,7 +46,6 @@ export default function App() {
     <BrowserRouter>
       <ScrollManager />
       <Routes>
-        <Route path="/admin/*" element={<Suspense fallback={null}><AdminDashboard /></Suspense>} />
         <Route path="*" element={<PublicWebsite />} />
       </Routes>
     </BrowserRouter>
