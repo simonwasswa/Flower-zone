@@ -24,7 +24,7 @@ const blooms = [
 const orderChannels = [
   { label: 'WhatsApp', icon: whatsappIcon, href: 'https://wa.me/256772262288' },
   { label: 'Instagram', icon: instagramIcon, href: 'https://www.instagram.com/flowerzone.ug' },
-  { label: 'Email', icon: emailIcon, href: 'mailto:tendofiona@yahoo.com' },
+  { label: 'Email', icon: emailIcon, href: 'mailto:simonwasswa33@gmail.com' },
 ];
 
 export default function Delivery() {

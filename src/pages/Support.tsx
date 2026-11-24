@@ -8,7 +8,7 @@ const fieldClass =
   'mt-2 w-full rounded-[8px] border border-transparent bg-field px-4 py-3.5 text-base text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-rose focus:bg-petal focus:ring-2 focus:ring-rose/20 sm:text-sm';
 
 const WHATSAPP_NUMBER = '256772262288';
-const SUPPORT_EMAIL = 'tendofiona@yahoo.com';
+const SUPPORT_EMAIL = 'simonwasswa33@gmail.com';
 const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hello Flower Zone, I need help with my order.')}`;
 const emailLink = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Flower Zone support request')}`;
 

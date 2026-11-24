@@ -15,13 +15,13 @@ The local site runs at `http://localhost:5173`.
 
 All email is sent through Resend from server-side endpoints, so the API key is never included in browser code:
 
-- `/api/contact`: Contact-form inquiries and Exclusive Circle signups, sent to `tendofiona@yahoo.com`.
-- `/api/support`: requests from the `/support` page. They are saved to the `support_tickets` table, then emailed to `tendofiona@yahoo.com` and `simonwasswa33@gmail.com`. The customer gets a confirmation email if they gave an email address.
-- `/api/feedback`: answers from the `/feedback` survey. They are saved to the `survey_responses` table, then emailed to both inboxes. 1–2 star ratings are flagged in the subject.
+- `/api/contact`: Contact-form inquiries and Exclusive Circle signups, sent to `simonwasswa33@gmail.com`.
+- `/api/support`: requests from the `/support` page. They are saved to the `support_tickets` table, then emailed to `simonwasswa33@gmail.com`. The customer gets a confirmation email if they gave an email address.
+- `/api/feedback`: answers from the `/feedback` survey. They are saved to the `survey_responses` table, then emailed to `simonwasswa33@gmail.com`. 1–2 star ratings are flagged in the subject.
 
 If Resend fails, support requests and survey answers are still saved.
 
-1. Create a Resend account using `tendofiona@yahoo.com`.
+1. Create a Resend account using `simonwasswa33@gmail.com`.
 2. Create an API key at [resend.com/api-keys](https://resend.com/api-keys).
 3. Create `.env.local` from `.env.example`.
 4. Set `RESEND_API_KEY` to the generated key.

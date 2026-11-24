@@ -1,4 +1,4 @@
-const recipientEmail = 'tendofiona@yahoo.com';
+const recipientEmail = 'simonwasswa33@gmail.com';
 
 export type ContactPayload = {
   kind?: 'contact' | 'newsletter';

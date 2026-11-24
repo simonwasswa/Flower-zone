@@ -29,9 +29,9 @@ const socialLinks = [
     href: 'https://www.facebook.com/FlowerZone-UG',
   },
   {
-    label: 'Email tendofiona@yahoo.com',
+    label: 'Email simonwasswa33@gmail.com',
     image: emailIcon,
-    href: 'mailto:tendofiona@yahoo.com',
+    href: 'mailto:simonwasswa33@gmail.com',
   },
 ];
 

@@ -1,7 +1,7 @@
 // Saves /support and /feedback submissions to Supabase, then emails the studio (and confirms support requests to the customer).
 // Runs on the server only, so the Resend key never reaches the browser.
 
-const studioRecipients = ['tendofiona@yahoo.com', 'simonwasswa33@gmail.com'];
+const studioRecipients = ['simonwasswa33@gmail.com'];
 const defaultFromEmail = 'Flower Zone <onboarding@resend.dev>';
 
 export type CustomerMailConfig = {
